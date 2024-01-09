@@ -1,50 +1,68 @@
 {
-  "private": true,
-  "name": "aa-bundler",
-  "version": "0.2.0",
+  "name": "test-bundler",
+  "version": "0.0.1",
   "author": "Dror Tirosh",
   "license": "MIT",
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "nohoist": [
-      "**eslint**"
-    ]
-  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "bundler": "yarn --cwd packages/bundler bundler",
-    "runop": "yarn --cwd packages/bundler runop",
-    "runop-goerli": "yarn runop --network goerli --unsafe",
-    "create-all-deps": "jq '.dependencies,.devDependencies' packages/*/package.json |sort  -u > all.deps",
-    "depcheck": "lerna exec --no-bail --stream --parallel -- npx depcheck",
-    "hardhat-node": "lerna run hardhat-node --stream --no-prefix --",
-    "hardhat-deploy": "lerna run hardhat-deploy --stream --no-prefix --",
-    "lerna-clear": "lerna run clear",
-    "lerna-lint": "lerna run lint --stream --parallel -- ",
-    "lerna-test": "lerna run hardhat-test --stream",
-    "lerna-tsc": "lerna run tsc --scope @account-abstraction/*",
-    "lerna-watch-tsc": "lerna run --parallel watch-tsc",
-    "lint-fix": "lerna run lint-fix --parallel",
-    "clear": "lerna run clear",
-    "hardhat-compile": "lerna run hardhat-compile",
-    "preprocess": "yarn lerna-clear && yarn hardhat-compile && yarn lerna-tsc",
-    "runop-self": "ts-node ./packages/bundler/src/runner/runop.ts --deployFactory --selfBundler --unsafe",
-    "ci": "env ; yarn depcheck; yarn preprocess ; yarn lerna-test"
+    "build": "tsc",
+    "build:clean": "rm -rf dist tsconfig.tsbuildinfo && yarn build",
+    "build:watch": "tsc -w --preserveWatchOutput",
+    "clean": "rm -rf dist artifacts cache src/contract-types",
+    "depcheck": "npx depcheck",
+    "hardhat:compile": "hardhat compile",
+    "lint": "eslint -f unix .",
+    "lint:fix": "eslint -f unix . --fix",
+    "setup": "yarn clean && yarn hardhat:compile && yarn build:clean",
+    "test": "yarn hardhat test src/bundler/test/* && yarn hardhat test src/sdk/test/*"
   },
   "dependencies": {
+    "@account-abstraction/contracts": "^0.6.0",
+    "@ethersproject/abi": "^5.7.0",
+    "@ethersproject/properties": "^5.7.0",
+    "@ethersproject/providers": "^5.7.0",
+    "async-mutex": "^0.4.0",
+    "body-parser": "^1.20.0",
+    "commander": "^9.4.0",
+    "cors": "^2.8.5",
+    "debug": "^4.3.4",
+    "ethers": "^5.7.0",
+    "express": "^4.18.1",
+    "ow": "^0.28.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@nomiclabs/hardhat-ethers": "^2.0.0",
+    "@nomiclabs/hardhat-etherscan": "^3.0.0",
+    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/hardhat": "^6.1.2",
+    "@types/chai": "^4.2.0",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/mocha": "^9.1.0",
+    "@types/node": "^16.4.12",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
+    "body-parser": "^1.20.0",
+    "chai": "^4.2.0",
     "depcheck": "^1.4.3",
     "eslint": "^8.21.0",
     "eslint-config-standard-with-typescript": "^22.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
-    "lerna": "^5.4.0",
-    "typescript": "^4.7.4",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
-  },
-  "packageManager": "yarn@1.22.19"
+    "hardhat": "^2.11.0",
+    "hardhat-deploy": "^0.11.11",
+    "hardhat-gas-reporter": "^1.0.8",
+    "solidity-coverage": "^0.7.21",
+    "ts-node": ">=8.0.0",
+    "typechain": "^8.1.0",
+    "typescript": "^4.7.4"
+  }
 }
