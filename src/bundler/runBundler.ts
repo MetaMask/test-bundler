@@ -98,7 +98,7 @@ export async function runBundler (argv: string[], overrideExit = true): Promise<
     chainId
   } = await provider.getNetwork()
 
-  if (chainId === 31337 || chainId === 1337) {
+  if (chainId === 31337) {
     if (config.debugRpc == null) {
       console.log('== debugrpc was', config.debugRpc)
       config.debugRpc = true
