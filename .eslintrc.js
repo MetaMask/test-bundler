@@ -23,7 +23,9 @@ module.exports = {
     project: ['./tsconfig.json', './tsconfig.packages.json']
   },
   ignorePatterns: [
-    'dist/'
+    'dist/',
+    '.eslintrc.js',
+    'hardhat.config.ts'
   ],
   rules: {
     'no-console': 'off'

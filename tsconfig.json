@@ -1,23 +1,9 @@
 {
+  "extends": "./tsconfig.packages.json",
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "composite": true,
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "src/bundler/test"]
+  "exclude": ["**/*.test.ts", "src/bundler/test"]
 }

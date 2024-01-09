@@ -3,7 +3,7 @@ import { assert, expect } from 'chai'
 import { defaultAbiCoder, hexConcat, hexlify, keccak256, parseEther } from 'ethers/lib/utils'
 import { ethers } from 'hardhat'
 
-import { AddressZero, decodeErrorReason, toBytes32 } from '../../utils'
+import { AddressZero, decodeErrorReason, toBytes32, UserOperation } from '../../utils'
 import {
   ValidateUserOpResult,
   ValidationManager,
@@ -27,11 +27,9 @@ import {
   TestStorageAccountFactory__factory,
   TestStorageAccount__factory,
   TestTimeRangeAccountFactory,
-  TestTimeRangeAccountFactory__factory,
+  TestTimeRangeAccountFactory__factory
 } from '../../contract-types'
 import { ReputationManager } from '../modules/ReputationManager'
-
-import { UserOperation } from '../../utils'
 
 const cEmptyUserOp: UserOperation = {
   sender: AddressZero,
@@ -141,7 +139,7 @@ describe('#ValidationManager', () => {
     },
     parseEther('0'), 0)
     const unsafe = !await supportsDebugTraceCall(provider)
-    vm = new ValidationManager(entryPoint, unsafe)
+    vm = new ValidationManager(entryPoint, reputationManager, unsafe)
 
     if (!await supportsDebugTraceCall(ethers.provider)) {
       console.log('WARNING: opcode banning tests can only run with geth')
