@@ -1,4 +1,4 @@
-# Test Bundler
+# MetaMask Test Bundler
 
 An EIP-4337 bundler used in MetaMask client E2E tests.
 
