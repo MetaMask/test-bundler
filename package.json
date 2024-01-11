@@ -1,7 +1,15 @@
 {
-  "name": "test-bundler",
-  "version": "0.0.1",
-  "author": "Dror Tirosh",
+  "name": "@metamask/test-bundler",
+  "version": "0.0.0",
+  "description": "An EIP-4337 bundler to be used in client E2E tests",
+  "homepage": "https://github.com/MetaMask/test-bundler#readme",
+  "bugs": {
+    "url": "https://github.com/MetaMask/test-bundler/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MetaMask/test-bundler.git"
+  },
   "license": "MIT",
   "files": [
     "dist"
@@ -13,10 +21,14 @@
     "build:clean": "rm -rf dist tsconfig.tsbuildinfo && yarn build",
     "build:watch": "tsc -w --preserveWatchOutput",
     "clean": "rm -rf dist artifacts cache src/contract-types",
-    "depcheck": "npx depcheck",
     "hardhat:compile": "hardhat compile",
-    "lint": "eslint -f unix .",
-    "lint:fix": "eslint -f unix . --fix",
+    "lint": "yarn lint:eslint && yarn lint:constraints && yarn lint:misc --check && yarn lint:dependencies --check && yarn lint:changelog",
+    "lint:changelog": "auto-changelog validate --prettier",
+    "lint:constraints": "yarn constraints",
+    "lint:dependencies": "depcheck && yarn dedupe",
+    "lint:eslint": "eslint . --cache --ext js,ts",
+    "lint:fix": "yarn lint:eslint --fix && yarn lint:constraints --fix && yarn lint:misc --write && yarn lint:dependencies && yarn lint:changelog",
+    "lint:misc": "prettier '**/*.json' '**/*.md' '**/*.yml' '!.yarnrc.yml' --ignore-path .gitignore --no-error-on-unmatched-pattern",
     "setup": "yarn clean && yarn hardhat:compile && yarn build:clean",
     "test": "yarn hardhat test src/bundler/test/* && yarn hardhat test src/sdk/test/*"
   },
@@ -38,6 +50,13 @@
     "ow": "^0.28.1"
   },
   "devDependencies": {
+    "@lavamoat/allow-scripts": "^2.3.1",
+    "@lavamoat/preinstall-always-fail": "^1.0.0",
+    "@metamask/auto-changelog": "^3.4.3",
+    "@metamask/eslint-config": "^12.2.0",
+    "@metamask/eslint-config-jest": "^12.1.0",
+    "@metamask/eslint-config-nodejs": "^12.1.0",
+    "@metamask/eslint-config-typescript": "^12.1.0",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
@@ -58,16 +77,47 @@
     "chai": "^4.2.0",
     "depcheck": "^1.4.3",
     "eslint": "^8.21.0",
-    "eslint-config-standard-with-typescript": "^22.0.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.2.2",
+    "eslint-plugin-jsdoc": "^39.9.1",
     "eslint-plugin-n": "^15.2.4",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "hardhat": "^2.11.0",
     "hardhat-deploy": "^0.11.11",
     "hardhat-gas-reporter": "^1.0.8",
+    "prettier": "^2.7.1",
+    "prettier-plugin-packagejson": "^2.3.0",
     "solidity-coverage": "^0.7.21",
     "ts-node": ">=8.0.0",
     "typechain": "^8.1.0",
+    "typedoc": "^0.23.15",
     "typescript": "^4.7.4"
+  },
+  "packageManager": "yarn@3.2.1",
+  "engines": {
+    "node": "^18.18 || >=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "lavamoat": {
+    "allowScripts": {
+      "@lavamoat/preinstall-always-fail": false,
+      "hardhat>@nomicfoundation/ethereumjs-blockchain>level>classic-level": false,
+      "hardhat>@nomicfoundation/ethereumjs-tx>ethereum-cryptography>secp256k1": false,
+      "hardhat>keccak": false,
+      "hardhat>ws>bufferutil": false,
+      "hardhat>ws>utf-8-validate": false,
+      "solidity-coverage>@truffle/provider>@truffle/interface-adapter>web3": false,
+      "solidity-coverage>@truffle/provider>@truffle/interface-adapter>web3>web3-bzz": false,
+      "solidity-coverage>@truffle/provider>@truffle/interface-adapter>web3>web3-shh": false,
+      "solidity-coverage>@truffle/provider>web3": false,
+      "solidity-coverage>@truffle/provider>web3>web3-bzz": false,
+      "solidity-coverage>@truffle/provider>web3>web3-core>web3-core-requestmanager>web3-providers-ws>websocket>es5-ext": false,
+      "solidity-coverage>@truffle/provider>web3>web3-shh": false
+    }
   }
 }
