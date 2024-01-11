@@ -235,14 +235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint-community/regexpp@npm:^4.4.0":
-  version: 4.6.2
-  resolution: "@eslint-community/regexpp@npm:4.6.2"
-  checksum: a3c341377b46b54fa228f455771b901d1a2717f95d47dcdf40199df30abc000ba020f747f114f08560d119e979d882a94cf46cfc51744544d54b00319c0f2724
-  languageName: node
-  linkType: hard
-
-"@eslint-community/regexpp@npm:^4.6.1":
+"@eslint-community/regexpp@npm:^4.4.0, @eslint-community/regexpp@npm:^4.6.1":
   version: 4.10.0
   resolution: "@eslint-community/regexpp@npm:4.10.0"
   checksum: 2a6e345429ea8382aaaf3a61f865cae16ed44d31ca917910033c02dc00d505d939f10b81e079fa14d43b51499c640138e153b7e40743c4c094d9df97d4e56f7b
@@ -875,17 +868,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/eslint-config-jest@npm:^12.1.0":
-  version: 12.1.0
-  resolution: "@metamask/eslint-config-jest@npm:12.1.0"
-  peerDependencies:
-    "@metamask/eslint-config": ^12.0.0
-    eslint: ^8.27.0
-    eslint-plugin-jest: ^27.1.5
-  checksum: 98f60234412051d429237dbf32b147a648a0e3b6adacafda24999ec9eb8096155c8000c62204415100c97980cc3bfe0a0fe19e4c318b8bb529eaf57e9f96e680
-  languageName: node
-  linkType: hard
-
 "@metamask/eslint-config-nodejs@npm:^12.1.0":
   version: 12.1.0
   resolution: "@metamask/eslint-config-nodejs@npm:12.1.0"
@@ -953,7 +935,6 @@ __metadata:
     "@lavamoat/preinstall-always-fail": ^1.0.0
     "@metamask/auto-changelog": ^3.4.3
     "@metamask/eslint-config": ^12.2.0
-    "@metamask/eslint-config-jest": ^12.1.0
     "@metamask/eslint-config-nodejs": ^12.1.0
     "@metamask/eslint-config-typescript": ^12.1.0
     "@nomicfoundation/hardhat-chai-matchers": ^1.0.3
@@ -982,7 +963,6 @@ __metadata:
     eslint: ^8.44.0
     eslint-config-prettier: ^8.8.0
     eslint-plugin-import: ^2.26.0
-    eslint-plugin-jest: ^27.2.2
     eslint-plugin-jsdoc: ^39.9.1
     eslint-plugin-n: ^15.2.4
     eslint-plugin-prettier: ^4.2.1
@@ -2188,7 +2168,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:5.62.0, @typescript-eslint/utils@npm:^5.10.0":
+"@typescript-eslint/utils@npm:5.62.0":
   version: 5.62.0
   resolution: "@typescript-eslint/utils@npm:5.62.0"
   dependencies:
@@ -4550,24 +4530,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:^27.2.2":
-  version: 27.6.2
-  resolution: "eslint-plugin-jest@npm:27.6.2"
-  dependencies:
-    "@typescript-eslint/utils": ^5.10.0
-  peerDependencies:
-    "@typescript-eslint/eslint-plugin": ^5.0.0 || ^6.0.0
-    eslint: ^7.0.0 || ^8.0.0
-    jest: "*"
-  peerDependenciesMeta:
-    "@typescript-eslint/eslint-plugin":
-      optional: true
-    jest:
-      optional: true
-  checksum: 9c2a950d0e7e76dd1b55016800088ab86ce590df24d0abf8573b09c547969daa395157de55408307824deae1cfde136cbaffb85932f28eceec0689f68cbdd3bf
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-jsdoc@npm:^39.9.1":
   version: 39.9.1
   resolution: "eslint-plugin-jsdoc@npm:39.9.1"
@@ -4681,14 +4643,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "eslint-visitor-keys@npm:3.4.1"
-  checksum: f05121d868202736b97de7d750847a328fcfa8593b031c95ea89425333db59676ac087fa905eba438d0a3c5769632f828187e0c1a0d271832a2153c1d3661c2c
-  languageName: node
-  linkType: hard
-
-"eslint-visitor-keys@npm:^3.4.3":
+"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.1, eslint-visitor-keys@npm:^3.4.3":
   version: 3.4.3
   resolution: "eslint-visitor-keys@npm:3.4.3"
   checksum: 36e9ef87fca698b6fd7ca5ca35d7b2b6eeaaf106572e2f7fd31c12d3bfdaccdb587bba6d3621067e5aece31c8c3a348b93922ab8f7b2cbc6aaab5e1d89040c60
