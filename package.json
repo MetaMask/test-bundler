@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "files": [
-    "dist"
+    "dist" 
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
