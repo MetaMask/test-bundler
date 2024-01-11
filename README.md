@@ -30,7 +30,7 @@ await server.stop();
 
 The server is primarily configured using a JSON file:
 
-```json
+```javascript
 {
   // Delay in seconds before submitting any pending user operations in a transaction.
   "autoBundleInterval": 3,
