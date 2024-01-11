@@ -28,7 +28,7 @@ function getCommandLineParams(programOpts: any): Partial<BundlerConfig> {
  * @param sources
  */
 function mergeConfigs(...sources: Partial<BundlerConfig>[]): BundlerConfig {
-  const mergedConfig = Object.assign({}, ...sources);
+  const mergedConfig = Object.assign({}, ...sources) as BundlerConfig;
   ow(mergedConfig, ow.object.exactShape(BundlerConfigShape));
   return mergedConfig;
 }

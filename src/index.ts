@@ -1,2 +1,2 @@
-export { runBundler } from './bundler/runBundler';
+export { startBundler } from './bundler/runBundler';
 export { BundlerServer } from './bundler/BundlerServer';

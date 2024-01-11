@@ -44,6 +44,31 @@ export async function connectContracts(
 }
 
 /**
+ * Start the bundler server.
+ * @param options - Options for the bundler server.
+ * @param options.configFile - Path to the config file.
+ * @param options.unsafe - Whether to disable additional validations requiring the RPC debug methods.
+ * @returns The bundler server instance.
+ */
+export async function startBundler({
+  configFile,
+  unsafe,
+}: {
+  configFile: string;
+  unsafe?: boolean;
+}): Promise<BundlerServer> {
+  const args = [
+    '-',
+    '-',
+    unsafe ? '--unsafe' : undefined,
+    '--config',
+    configFile,
+  ].filter((arg) => arg !== undefined) as string[];
+
+  return await runBundler(args);
+}
+
+/**
  * start the bundler server.
  * this is an async method, but only to resolve configuration. after it returns, the server is only active after asyncInit()
  * @param argv

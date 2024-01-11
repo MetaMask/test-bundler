@@ -28,7 +28,7 @@ export type BundlerConfig = {
 export const BundlerConfigShape = {
   beneficiary: ow.string,
   entryPoint: ow.string,
-  gasFactor: ow.string,
+  gasFactor: ow.optional.string,
   minBalance: ow.string,
   mnemonic: ow.string,
   network: ow.string,
@@ -40,8 +40,8 @@ export const BundlerConfigShape = {
   whitelist: ow.optional.array.ofType(ow.string),
   blacklist: ow.optional.array.ofType(ow.string),
   maxBundleGas: ow.number,
-  minStake: ow.string,
-  minUnstakeDelay: ow.number,
+  minStake: ow.optional.string,
+  minUnstakeDelay: ow.optional.number,
   autoBundleInterval: ow.number,
   autoBundleMempoolSize: ow.number,
 };
