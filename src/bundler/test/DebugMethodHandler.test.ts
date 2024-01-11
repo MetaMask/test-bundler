@@ -1,36 +1,49 @@
-import { DebugMethodHandler } from '../DebugMethodHandler'
-import { ExecutionManager } from '../modules/ExecutionManager'
-import { BundlerReputationParams, ReputationManager } from '../modules/ReputationManager'
-import { BundlerConfig } from '../BundlerConfig'
-import { parseEther } from 'ethers/lib/utils'
-import { MempoolManager } from '../modules/MempoolManager'
-import { ValidationManager, supportsDebugTraceCall } from '../../validation-manager'
-import { BundleManager, SendBundleReturn } from '../modules/BundleManager'
-import { UserOpMethodHandler } from '../UserOpMethodHandler'
-import { ethers } from 'hardhat'
-import { EntryPoint, EntryPoint__factory, SimpleAccountFactory__factory } from '@account-abstraction/contracts'
-import { DeterministicDeployer, SimpleAccountAPI } from '../../sdk'
-import { Signer, Wallet } from 'ethers'
-import { resolveHexlify } from '../../utils'
-import { expect } from 'chai'
-import { createSigner } from './testUtils'
-import { EventsManager } from '../modules/EventsManager'
+import type { EntryPoint } from '@account-abstraction/contracts';
+import {
+  EntryPoint__factory,
+  SimpleAccountFactory__factory,
+} from '@account-abstraction/contracts';
+import { expect } from 'chai';
+import type { Signer } from 'ethers';
+import { Wallet } from 'ethers';
+import { parseEther } from 'ethers/lib/utils';
+import { ethers } from 'hardhat';
 
-const provider = ethers.provider
+import { createSigner } from './testUtils';
+import { DeterministicDeployer, SimpleAccountAPI } from '../../sdk';
+import { resolveHexlify } from '../../utils';
+import {
+  ValidationManager,
+  supportsDebugTraceCall,
+} from '../../validation-manager';
+import type { BundlerConfig } from '../BundlerConfig';
+import { DebugMethodHandler } from '../DebugMethodHandler';
+import type { SendBundleReturn } from '../modules/BundleManager';
+import { BundleManager } from '../modules/BundleManager';
+import { EventsManager } from '../modules/EventsManager';
+import { ExecutionManager } from '../modules/ExecutionManager';
+import { MempoolManager } from '../modules/MempoolManager';
+import {
+  BundlerReputationParams,
+  ReputationManager,
+} from '../modules/ReputationManager';
+import { UserOpMethodHandler } from '../UserOpMethodHandler';
+
+const { provider } = ethers;
 
 describe('#DebugMethodHandler', () => {
-  let debugMethodHandler: DebugMethodHandler
-  let entryPoint: EntryPoint
-  let methodHandler: UserOpMethodHandler
-  let smartAccountAPI: SimpleAccountAPI
-  let signer: Signer
-  const accountSigner = Wallet.createRandom()
+  let debugMethodHandler: DebugMethodHandler;
+  let entryPoint: EntryPoint;
+  let methodHandler: UserOpMethodHandler;
+  let smartAccountAPI: SimpleAccountAPI;
+  let signer: Signer;
+  const accountSigner = Wallet.createRandom();
 
   before(async () => {
-    signer = await createSigner()
+    signer = await createSigner();
 
-    entryPoint = await new EntryPoint__factory(signer).deploy()
-    DeterministicDeployer.init(provider)
+    entryPoint = await new EntryPoint__factory(signer).deploy();
+    DeterministicDeployer.init(provider);
 
     const config: BundlerConfig = {
       beneficiary: await signer.getAddress(),
@@ -40,63 +53,92 @@ describe('#DebugMethodHandler', () => {
       mnemonic: '',
       network: '',
       port: '3000',
-      unsafe: !await supportsDebugTraceCall(provider as any),
+      unsafe: !(await supportsDebugTraceCall(provider as any)),
       conditionalRpc: false,
       autoBundleInterval: 0,
       autoBundleMempoolSize: 0,
       maxBundleGas: 5e6,
       // minstake zero, since we don't fund deployer.
       minStake: '0',
-      minUnstakeDelay: 0
-    }
+      minUnstakeDelay: 0,
+    };
 
-    const repMgr = new ReputationManager(provider, BundlerReputationParams, parseEther(config.minStake), config.minUnstakeDelay)
-    const mempoolMgr = new MempoolManager(repMgr)
-    const validMgr = new ValidationManager(entryPoint, repMgr, config.unsafe)
-    const eventsManager = new EventsManager(entryPoint, mempoolMgr, repMgr)
-    const bundleMgr = new BundleManager(entryPoint, eventsManager, mempoolMgr, validMgr, repMgr,
-      config.beneficiary, parseEther(config.minBalance), config.maxBundleGas, false)
-    const execManager = new ExecutionManager(repMgr, mempoolMgr, bundleMgr, validMgr)
+    const repMgr = new ReputationManager(
+      provider,
+      BundlerReputationParams,
+      parseEther(config.minStake),
+      config.minUnstakeDelay,
+    );
+    const mempoolMgr = new MempoolManager(repMgr);
+    const validMgr = new ValidationManager(entryPoint, repMgr, config.unsafe);
+    const eventsManager = new EventsManager(entryPoint, mempoolMgr, repMgr);
+    const bundleMgr = new BundleManager(
+      entryPoint,
+      eventsManager,
+      mempoolMgr,
+      validMgr,
+      repMgr,
+      config.beneficiary,
+      parseEther(config.minBalance),
+      config.maxBundleGas,
+      false,
+    );
+    const execManager = new ExecutionManager(
+      repMgr,
+      mempoolMgr,
+      bundleMgr,
+      validMgr,
+    );
     methodHandler = new UserOpMethodHandler(
       execManager,
       provider,
       signer,
       config,
-      entryPoint
-    )
+      entryPoint,
+    );
 
-    debugMethodHandler = new DebugMethodHandler(execManager, eventsManager, repMgr, mempoolMgr)
+    debugMethodHandler = new DebugMethodHandler(
+      execManager,
+      eventsManager,
+      repMgr,
+      mempoolMgr,
+    );
 
-    DeterministicDeployer.init(ethers.provider)
-    const accountDeployerAddress = await DeterministicDeployer.deploy(new SimpleAccountFactory__factory(), 0, [entryPoint.address])
+    DeterministicDeployer.init(ethers.provider);
+    const accountDeployerAddress = await DeterministicDeployer.deploy(
+      new SimpleAccountFactory__factory(),
+      0,
+      [entryPoint.address],
+    );
 
     smartAccountAPI = new SimpleAccountAPI({
       provider,
       entryPointAddress: entryPoint.address,
       owner: accountSigner,
-      factoryAddress: accountDeployerAddress
-    })
-    const accountAddress = await smartAccountAPI.getAccountAddress()
+      factoryAddress: accountDeployerAddress,
+    });
+    const accountAddress = await smartAccountAPI.getAccountAddress();
     await signer.sendTransaction({
       to: accountAddress,
-      value: parseEther('1')
-    })
-  })
+      value: parseEther('1'),
+    });
+  });
 
   it('should return sendBundleNow hashes', async () => {
-    debugMethodHandler.setBundlingMode('manual')
-    const addr = await smartAccountAPI.getAccountAddress()
+    debugMethodHandler.setBundlingMode('manual');
+    const addr = await smartAccountAPI.getAccountAddress();
     const op1 = await smartAccountAPI.createSignedUserOp({
       target: addr,
-      data: '0x'
-    })
-    const userOpHash = await methodHandler.sendUserOperation(await resolveHexlify(op1), entryPoint.address)
-    const {
-      transactionHash,
-      userOpHashes
-    } = await debugMethodHandler.sendBundleNow() as SendBundleReturn
-    expect(userOpHashes).eql([userOpHash])
-    const txRcpt = await provider.getTransactionReceipt(transactionHash)
-    expect(txRcpt.to).to.eq(entryPoint.address)
-  })
-})
+      data: '0x',
+    });
+    const userOpHash = await methodHandler.sendUserOperation(
+      await resolveHexlify(op1),
+      entryPoint.address,
+    );
+    const { transactionHash, userOpHashes } =
+      (await debugMethodHandler.sendBundleNow()) as SendBundleReturn;
+    expect(userOpHashes).eql([userOpHash]);
+    const txRcpt = await provider.getTransactionReceipt(transactionHash);
+    expect(txRcpt.to).to.eq(entryPoint.address);
+  });
+});

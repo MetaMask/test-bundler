@@ -1,3 +1,1 @@
-describe('opcode banning', () => {
-
-})
+describe('opcode banning', () => {});
