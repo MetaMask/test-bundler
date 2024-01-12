@@ -20,10 +20,13 @@ import {
   erc4337RuntimeVersion,
   RpcError,
 } from '../utils';
+import EventEmitter from 'events';
 
 const debug = Debug('aa.rpc');
 export class BundlerServer {
   app: Express;
+
+  hub: EventEmitter;
 
   private readonly httpServer: Server;
 
@@ -35,6 +38,8 @@ export class BundlerServer {
     readonly wallet: Signer,
   ) {
     this.app = express();
+    this.hub = new EventEmitter();
+
     this.app.use(cors());
     this.app.use(bodyParser.json());
 
@@ -185,6 +190,11 @@ export class BundlerServer {
           params[0],
           params[1],
         );
+
+        if (result?.length) {
+          this.hub.emit('user-operation-added', result);
+        }
+
         break;
       case 'eth_estimateUserOperationGas':
         result = await this.methodHandler.estimateUserOperationGas(
