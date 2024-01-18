@@ -1,6 +1,6 @@
 {
   "name": "@metamask/test-bundler",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "An EIP-4337 bundler to be used in client E2E tests",
   "homepage": "https://github.com/MetaMask/test-bundler#readme",
   "bugs": {
