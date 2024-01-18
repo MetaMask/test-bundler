@@ -27,6 +27,7 @@ jobs:
       - name: Install
         run: |
           yarn install
+          yarn hardhat:compile
           yarn build
       - uses: actions/cache@v3
         id: restore-build

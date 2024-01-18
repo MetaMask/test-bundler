@@ -30,7 +30,7 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
       - run: yarn --immutable --immutable-cache
-      - run: yarn hardhat compile
+      - run: yarn hardhat:compile
       - run: yarn build
       - name: Require clean working directory
         shell: bash
